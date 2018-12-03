@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .list-div{
+                width: 100%;
+                height: 200px;
+            }
+            .list-iframe{
+                width: 80%;
+                height: 200vh;
+                float: right;  
+            }
+            #board-list{
+                margin: 20px;
+                width: 200px;
+                height: 700px;
+                float: left;
+            }
+        </style>
+          <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+          <link rel="stylesheet" href="/resources/demos/style.css">
+          <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script>
+            $(function(){
+               
+                    $.ajax({
+                        url: '/list/menu',
+                        type: 'get',
+                        success: function(result){
+                            var list = '<table>';
+                                for(var i=1; i<result.region.length;i++){
+                                    list += '<tr><td class="'+result.region[i]+'"><a href="/" target="list-iframe">'+result.region[i]+'</a></td></tr>';
+                                }
+                                list +='</table>';
+                                
+                            $('#board-list').append(list);
+                        }
+                    })
+                    
+                })
+        </script>
+    </head>
+    <body>
+        <div class="list-div">
+            <div id="board-list">
+            </div>
+            <iframe class="list-iframe" src="/a/list.html" id="aaa" name="list-iframe" scrolling="no" frameborder="0">
+                
+            </iframe>
+        </div>
+    </body>
+</html>

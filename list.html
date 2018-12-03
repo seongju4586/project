@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <link rel="stylesheet" href="/index/css/board.css">
+            <script src="/index/jquery_ui/jquery/jquery.js"></script>
+            <script src="/index/jquery_ui/jquery-ui.js"></script>
+            <script>
+           var nowPage = 1;
+            var totalPage = 0;
+            var buttonAmount = 0;
+            $(function(){
+                $.ajax({
+                    
+                    url: '/menu',
+                    type: 'get',
+                    data: {now : nowPage},
+                    success: function(result){
+                        var header = result.type+' 게시판' ;
+                        $('#csv-ui-header').append(header);
+        
+                        var button = '<button onclick="prev()"><</button>';
+                        for(var i=1; i<=result.button; i++)
+                        {
+                            button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                        }
+                        button += '<button onclick="next()">></button>';
+                        $('#paging').append(button);
+
+                        var table ='';
+                        for(var i=0; i < result.data.length; i++)
+                        {
+
+                            table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(result.data.length-i-(nowPage-1*7))+'</td><td><a href="/select?id='+result.data[i].id+'" target="list-iframe">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                        }
+                        $('.csvBoardBody table tr:first').after(table);
+
+                        $('#now').text(nowPage);
+                        $('#total').text(result.total);
+                        var a = $('#paging').height()+$('#csv-ui-header').height()+$('.csvBoardBody').height()+$('#select-write').height()+50;
+
+                    }
+                });
+               
+            });
+
+            function writer(){
+                if($('#login_check').val() == '1'){
+                    if($('#login_write').val()=='true'){
+                        $('.csvBoardBody').load('/writer');
+                    }else{
+                        alert('회원님은 쓰기 권한이 없습니다');
+                    }
+                }else{
+                    alert('회원분만 가능합니다') 
+                }
+                
+            }
+            function click2(x){
+                $.ajax({
+                        url: '/list/'+x,
+                        type: 'get',
+                        success: function(result){
+                           var co =  result.pageValue-result.page;
+                            $('.found').remove();
+                            var table ='';
+                            for(var i=0;i<result.data.length;i++){
+                                    table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(co-i)+'</td><td><a href="#" onclick="selectBoard('+result.data[i].id+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                                }
+                                $('.csvBoardBody table tr:first').after(table);
+                        }
+                    });
+            }
+            function deleteBoard(){
+                if($('#login_check').val() == '1'){
+                    if($('#login_delete').val()=='true'){
+                    var ckboxArray = new Array;
+                    $('input:checkbox[name="ckbox"]:checked').each(function(){
+                        ckboxArray.push($(this).val());
+                    });
+                    $.ajax({ 
+                        url: '/delete',
+                        type: 'get',
+                        data: {ckboxamount :ckboxArray,category:$('#region_id').val()},
+                        success: function(result){
+                            alert('삭제되었습니다');
+                            $('.found').remove();
+                            $('#paging').text('');
+                            var table ='';
+                            var button = '<button onclick="prev()"><</button>';
+                            buttonAmount = result.data.length/7;
+
+                            if(result.data.length % 7 > 0){
+                                buttonAmount = parseInt(buttonAmount) + 1 ;
+                            }else{
+                                buttonAmount = parseInt(result.data.length/7);
+                            }
+                            if( buttonAmount % 7 > 0){
+                                totalPage = parseInt(buttonAmount / 7) + 1 ;
+                            }else{
+                                totalPage = parseInt(buttonAmount / 7);
+                            }
+                            
+                            if(totalPage <= 1){
+                                for(var i=1; i<=buttonAmount; i++){
+                                    button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                                }           
+                            }else{
+                                for(var i=1; i<=5; i++){
+                                    button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                                }
+
+                            }
+                            button += '<button onclick="next()">></button>';  
+                            $('#paging').append(button);
+
+                            if(result.data.length < 7){
+                                for(var i=0;i<result.data.length;i++){
+                                    table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(result.data.length-i)+'</td><td><a href="#" onclick="selectBoard('+result.data[i].id+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                                }
+                            }else{
+                                for(var i=0;i<7;i++){
+                                    table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(result.data.length-i)+'</td><td><a href="#" onclick="selectBoard('+result.data[i].id+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                                }
+                            }
+                            $('.csvBoardBody table tr:first').after(table);
+                            nowPage=1;
+                            $('#main-content').load('/home');
+                            }
+                        });
+                            
+                    }else{
+                        alert('회원님은 삭제 권한이 없습니다');
+                    }
+                }else{
+                    alert('회원분만 가능합니다') 
+                }
+
+                }
+                function selectBoard(x){
+                        $.ajax({
+                            url:'/select',
+                            type:'get',
+                            data:{id:x},
+                            success: function(){
+                                $('.csvBoardBody').load('/select/2');
+                            }
+                        })
+                    
+            }
+            function prev(){
+        nowPage = nowPage - 1;
+        
+        if(nowPage == 0){
+            alert('처음 페이지입니다');
+            nowPage = 1;
+        }else{
+            $.ajax({
+                url:'/block/'+nowPage,
+                type: 'get',
+                success: function(result){
+                        $('.found').remove();
+                        $('#paging').text('');
+                        var pageNumber = (parseInt(nowPage)-1)*5+1;
+                        var table ='';
+                        var button = '<button onclick="prev()"><</button>';
+                        if(pageNumber + 4 >= buttonAmount){
+                            for(var i= pageNumber; i<=buttonAmount; i++){
+                                
+                                button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                            }
+                        }else{
+                            for(var i= pageNumber; i <= pageNumber+4; i++){
+                                
+                                button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                            }
+                        }
+                        button += '<button onclick="next()">></button>';  
+                                    $('#paging').append(button);
+
+                        if(result.data.length < 7){
+                            for(var i=0;i<result.data.length;i++){
+                                table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(result.data.length-i)+'</td><td><a href="#" onclick="selectBoard('+result.data[i].id+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                            }
+                        }else{
+                            for(var i=0;i<7;i++){
+                                table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].id+'"/></td><td>'+(result.data.length-i)+'</td><td><a href="#" onclick="selectBoard('+result.data[i].id+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                            }
+                        }
+                        $('.csvBoardBody table tr:first').after(table);
+                } 
+            });
+        
+        }
+    }
+    function next(){
+        nowPage = nowPage +1;
+        if(nowPage > totalPage){
+            alert('마지막 페이지입니다');
+            nowPage = totalPage;
+        }else{
+            $.ajax({
+                url:'/block/'+nowPage,
+                type: 'get',
+                data: {amount : $('#pagingNumber').val(),category:$('#catagoryValue').val()},
+                success: function(result){
+                        $('.found').remove();
+                        $('#paging').text('');
+                        var pageNumber = (parseInt(nowPage)-1)*5+1;
+                        var table ='';
+                        var button = '<button onclick="prev()"><</button>';
+                        if(pageNumber + 4 >= buttonAmount){
+                            for(var i= pageNumber; i<=buttonAmount; i++){
+                                
+                                button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                            }
+                        }else{
+                            for(var i= pageNumber; i <= pageNumber+4; i++){
+                                
+                                button += '<button onclick="click2('+i+')" value="'+i+'">'+i+'</button>';
+                            }
+                        }
+                        button += '<button onclick="next()">></button>';  
+                                    $('#paging').append(button);
+
+                        if(result.data.length < result.amount){
+                            for(var i=0;i<result.data.length;i++){
+                                table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].number+'"/></td><td>'+result.data[i].number+'</td><td><a href="#" onclick="selectBoard('+result.data[i].number+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                            }
+                        }else{
+                            for(var i=0;i<result.amount;i++){
+                                table += '<tr class="found"><td><input name="ckbox" type="checkbox" value="'+result.data[i].number+'"/></td><td>'+result.data[i].number+'</td><td><a href="#" onclick="selectBoard('+result.data[i].number+')">'+result.data[i].title+'</a></td><td>'+result.data[i].writer+'</td><td>'+result.data[i].date+'</td><td>'+result.data[i].count+'</td></tr>';
+                            }
+                        }
+                        $('.csvBoardBody table tr:first').after(table);
+                } 
+            });
+        
+        }
+    }                
+           
+    
+            </script>
+    </head>
+    <body>
+        <div class="csvBoardDiv">
+            <br>
+            <div id="csv-ui-header"></div>
+            <br><span class="page-ui" > < <span id="now"></span> / <span id="total"></span> > </span>
+            <div class="csvBoardBody">
+                <div>
+                    <table>
+                        <tr id="first">
+                            <td id="value">C</td>
+                            <td id="number">번호</td>
+                            <td id="title">제목</td>
+                            <td id="editor">글쓴이</td>
+                            <td id="editdate">작성일</td>
+                            <td id="count">조회수</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="paging"></div>
+                <div id="select-write">
+                    <select id="zzzz"><option>제목</option></select>
+                    <input type="text" id="searchText" placeholder="검색"><button onclick="searchBorad()">검색</button> 
+                    <button  style="float:right;" onclick="writer()">글쓰기</button>
+                    <button  style="float:right;" onclick="deleteBoard()">삭제</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

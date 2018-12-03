@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Gaegu" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding" rel="stylesheet">
+        <script src="/index/jquery_ui/jquery/jquery.js"></script>
+        <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <script>
+            var page = 0;
+            var nowPage = 1;
+            $(function(){
+                $('#main-category').load('/category');
+                $('#main-title').load('/a/main.html');
+                $.ajax({
+                    url:'/region/infor/1',
+                    type:'get',
+                    data:{infor:$('#region').val()},
+                    success: function(result){
+                    
+                        page = result.page;
+                        var value = '';
+                        for(var i=0; i<result.result.length;i++){
+                            var a = String(result.result[i].infor) ;
+                            a = a.substring(0,22) +'...';
+                            var f = String(result.result[i].address);
+                            f = f.split(' ');
+
+                            value += '<a href="/select?id='+result.result[i].id+'">';
+                            value += '<div class="seoul-content" >';
+                            value += '<img src="/'+result.result[i].mainImage+'" style="width:350px;height:350px;"></img>';
+                            value += '<div style="width:350px;height:150px; text-align: left;" class="zxc">';
+                            value += '<span class="score">'+result.result[i].score+'</span><br>';
+                            value += '<span class="font">'+result.result[i].restaurant+' </span><br>';
+                            value += '<span class="tjfaud">'+f[2]+'</span><p>';
+                            value += '<span class="tjfaud">'+a+'</span></div></div></a>'; 
+                            $('#main-content').append(value);
+                            value ='';  
+                        }
+                        if(page >= 2){
+                            var di = '<div class="many-view" onclick="inforPage()">더보기</div>';
+                            $('#main-content').after(di);
+                        }    
+                    }  
+                })
+                
+                                     
+            })
+            function inforPage(){
+                nowPage = nowPage + 1 ;
+                $.ajax({
+                    url:'/region/infor/'+nowPage,
+                    type:'get',
+                    data:{infor:$('#region').val()},
+                    success:function(result){
+                        var value = '';
+                        for(var i=0; i<result.result.length;i++){
+
+                            var a = String(result.result[i].infor) ;
+                            a = a.substring(0,22) +'...';
+                            var f = String(result.result[i].address);
+                            f = f.split(' ');
+                            value += '<a href="/select?id='+result.result[i].id+'">';
+                            value += '<div class="seoul-content" >';
+                            value += '<img src="/'+result.result[i].mainImage+'" style="width:350px;height:350px;"></img>';
+                            value += '<div style="width:350px;height:150px; text-align: left;" class="zxc">';
+                            value += '<span class="score">'+result.result[i].score+'</span><br>';
+                            value += '<span class="font">'+result.result[i].restaurant+' </span><br>';
+                            value += '<span class="tjfaud">'+f[2]+'</span><p>';
+                            value += '<span class="tjfaud">'+a+'</span></div></div></a>'; 
+                            $('#main-content').append(value);
+                            value ='';  
+                        }
+                        if(nowPage == page){
+                            $('.many-view').remove();
+                        }
+                    }
+                });
+            }
+        </script>
+        <style>
+            #main-div{text-align: center;  }
+            #main-title{text-align: center;}
+            #main-category{
+                display: inline-block;
+                text-align: center;
+                width: 1400px;
+
+            }
+            #main-content{
+                display: inline-block;
+                width: 1400px;
+                height: auto;
+                overflow: hidden;
+            }
+            #main-end{
+                display: inline-block;
+                width: 1400px;
+                color: rgb(175, 172, 172);
+                font-size: 15pt;
+            }
+            .seoul-content{
+                margin: 50px;
+                width:350px; height: 500px;
+                float: left;
+            }
+            .score{
+                margin: 10px;
+                color: rgb(255, 115, 0);
+                font-weight: bold;
+                font-size: 18pt;
+
+            }
+            .font{
+                margin: 10px;
+                color: black;
+                font-weight: bold;
+                font-family: 'Gaegu',sans-serif;
+                font-size: 18pt;
+            }
+            .tjfaud{
+                margin: 10px;
+                color: black;
+            }
+            .many-view{
+                height: 25px;
+                width: 1400px;
+                font-family: 'Nanum Gothic Coding',sans-serif;
+                background-color:rgb(223, 219, 219);
+                display: inline-block;
+                font-size: 16pt;
+                cursor: pointer;
+                }
+        </style>
+    </head>
+    <body>
+        <input type="hidden" value="<%= data %>" id="region" />
+            <div id="main-div">
+                    <div id="main-title"></div>
+                    <div id="main-category"></div>
+                    <div id="main-content" >
+
+  
+                 
+
+                    </div>
+                    <div id="main-end">
+                    <hr>(주)맛고 대전시 서구 월평대로 2 사업자등록번호 123-34-5678 통신판매신고 123-4567-89호<br>
+                    대표이사 홍길동 대표전화 042-555-5555 Fax 050-1234-1234 naver@naver.com<p>copyright (주)맛고 Allright reserved</p>
+                    </div>
+            </div>
+
+    </body>
+</html>

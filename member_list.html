@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style>
+                    .member-table{
+                        display: inline-block;
+                        width: 1050px;
+                        height: 430px;
+                        border: 1px solid black;
+                    }
+                    .member-table tr td{
+                        border: 1px solid black;
+                        text-align:center;
+                    }
+
+                </style>
+    </head>
+    <body>
+    
+<table class="member-table">
+        <tr ><td style="width:20%; height:50px; text-align:center;">E-MAIL</td>
+            <td style="width:15%;text-align:center;">ID</td>
+            <td style="width:10%;text-align:center;">PWD</td>
+            <td style="width:6%;text-align:center;">MANAGER</td>
+            <td style="width:6%;text-align:center;">WRITE</td>
+            <td style="width:6%;text-align:center;">DELETE</td>
+            <td style="width:37%;text-align:center;">AUTHORITY</td>
+        </tr>
+        <% data.forEach(function(value,i) { %>
+        <tr style="height:35px;" class="member-list">
+            <td> <%= value.email %> </td>
+            <td class="id_check"> <%= value.id %> </td>
+            <% if( check != 1){%>
+            <td> <%= value.pwd %> </td>
+            <% }else{ %>
+            <td> *** </td>
+            <% }%>
+            <td> <%= value.manager %> </td>
+            <td> <%= value.write %> </td>
+            <td> <%= value.delete %> </td>
+            
+            <td>
+                <% if( check != 1){%>
+                    <% if( value.manager == false) {%>
+                        manager: <select name="<%= value.id %>" >
+                                <option value="true">true</option>
+                                <option value="false" selected>false</option>
+                                </select>
+                    <% }else if( value.manager == true) { %>
+                        manager: <select name="<%= value.id %>" >
+                                <option value="true">true</option>
+                                <option value="false">false</option>
+                                </select>
+                    <% }%>
+                <% }%>
+                <% if( value.write == false) {%>
+                    write: <select name="<%= value.id %>">
+                            <option value="true">true</option>
+                            <option value="false" selected>false</option>
+                        </select>
+                <% }else{ %>
+                    write: <select name="<%= value.id %>">
+                            <option value="true">true</option>
+                            <option value="false">false</option>
+                        </select>
+                <% }%>
+
+                <% if( value.delete == false) {%>
+                    delete: <select name="<%= value.id %>">
+                            <option value="true">true</option>
+                            <option value="false" selected>false</option>
+                        </select>
+                <% }else{ %>
+                    delete: <select name="<%= value.id %>">
+                            <option value="true">true</option>
+                            <option value="false">false</option>
+                        </select>
+                <% }%>
+                
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+        </body>
+
+
+    </html>

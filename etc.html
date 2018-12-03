@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Gamja+Flower" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Stylish" rel="stylesheet">
+        <script src="/index/jquery_ui/jquery/jquery.js"></script>
+        <script src="/index/js/bootstrap.js"></script>
+        <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <style>
+            #main-div{text-align: center;  }
+            #main-title{text-align: center;}
+            #main-category{
+                display: inline-block;
+                text-align: center;
+                width: 1400px;
+
+            }
+            #main-content{
+                display: inline-block;
+                width: 1400px;
+                height: auto;
+                overflow: hidden;
+                text-align: center;
+            }
+            #main-end{
+                display: inline-block;
+                width: 1400px;
+                color: rgb(175, 172, 172);
+            }
+            .Etc{
+                display: inline-block;
+                width:1100px;
+            }
+            .Etc .Etc-table{
+                border-collapse: collapse ;
+
+                width: 1100px;
+                padding: 0px;
+            }
+
+            
+            .Etc .Etc-table .first{
+                height: 35px;
+                border-top: 3px solid rgb(158, 157, 157);
+                border-bottom: 3px solid rgb(158, 157, 157);
+                color:black;
+                font-family: 'Gamja Flower',sans-serif;
+                font-size: 14pt;
+                font-weight: bold;
+                
+                
+            }
+            .Etc .Etc-table caption{
+                text-align: left;
+                margin: 20px;
+                font-family: 'Stylish',sans-serif;
+                font-size: 25pt;
+            }
+            .list{
+                border-bottom: 1px solid rgb(219, 219, 219);
+                height: 30px;
+            }
+            
+        </style>
+        <script>
+            $(function(){
+                $('#main-category').load('/category');
+                $('#main-title').load('/a/main.html');
+                
+            })
+
+        </script>
+    </head>
+    <body>
+        <div id="main-div">
+            <div id="main-title"></div>
+            <div id="main-category"></div>
+            <div id="main-content">
+                    <div class="Etc">
+                            <table class="Etc-table">
+                                <caption>꿀팁이 가득한 게시판</caption>
+                                <tr class="first">
+                                    <td style="width:100px">#</td>
+                                    <td style="width:700px">제목</td>
+                                    <td style="width:100px">글쓴이</td>
+                                    <td style="width:100px">작성일</td>
+                                    <td style="width:100px">조회수</td>
+                                </tr>
+                                <tr class="list"><td><input type="checkbox"/></td><td>백종원의 만두소스만들기</td><td>아롱이</td><td>2018. 11. 30</td><td>0</td></tr>
+
+                            </table>
+                            <br>
+                            <div style="width: 1100px;text-align: right;"><button>글쓰기</button></div>
+                            <div style="width: 1100px;text-align: center;"><button>1</button></div>
+                    </div>
+            </div>
+            <div id="main-end">
+                    <hr>(주)맛고 대전시 서구 월평대로 2 사업자등록번호 123-34-5678 통신판매신고 123-4567-89호<br>
+                    대표이사 홍길동 대표전화 042-555-5555 Fax 050-1234-1234 naver@naver.com<p>copyright (주)맛고 Allright reserved</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Poor+Story" rel="stylesheet">
+        <script src="/index/jquery_ui/jquery/jquery.js"></script>
+        <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyBI0iU-DxKV3D9GT3Z4DbsysH8x5LGLoX0"></script>
+        <script>
+            var map;
+            $(function(){
+                $('#main-category').load('/category');
+                $('#main-title').load('/a/main.html');
+                var address = '<%= data.address %>';
+                initialize(address);
+
+            });
+            
+            function initialize(e) {                   
+                var myLatlng = new google.maps.LatLng();
+                var mapOptions = {
+                    zoom: 17,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                }
+                var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+                var address = e;
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode( { 'address': address}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        marker = new google.maps.Marker({
+                                        map: map,
+                                        title: '한밭도서관', // 마커에 마우스 포인트를 갖다댔을 때 뜨는 타이틀
+                                        position: results[0].geometry.location
+                                    }); 
+                    }
+                });
+            }
+            function show(e){
+                var ee = String(e);
+                ee = ee.substring(0,7);
+                var eee = String(e);
+                eee = eee.substring(7);
+ 
+                $('.select-image').html('<img src="/'+ee+'/'+eee+'" style="width:600px;height:450px;"/>' );
+            }
+            </script>
+        <style>
+            #main-div{text-align: center;  }
+            #main-title{text-align: center;}
+            #main-category{
+                display: inline-block;
+                text-align: center;
+                width: 1400px;
+
+            }
+            #main-content{
+                display: inline-block;
+                width: 1400px;
+                height: auto;
+                overflow: hidden;
+            }
+            #selectContent{
+                text-align: center;
+                border: 1px solid;
+                border-color: #D8D8D8;
+                border-radius: 5px;
+            }
+            .select-infor{width:1300px; display: inline-block;}
+            .select-infor .select-value{height:600px;width:600px; display: block; float: left; margin: 20px;}
+            .select-infor .select-image{height:450px;width:600px;}
+            .select-infor .select-image-infor{height:150px;width:600px; }
+            .select-value .select-table{
+                height:600px;width:600px; 
+            }
+            .hr{
+                width: 1300px; height: 1px; border: 1px solid black; background-color: black; border-radius: 10px;
+            }
+            .select-value .select-table-detail{
+                
+                width: 1300px; height:600px; margin: -20px;
+
+                border-top: 1px solid #444444;
+                border-bottom: 1px solid #444444;
+                border-collapse: collapse;
+   
+
+                
+            }
+            .select-table-detail tr td{
+                border-bottom: 1px solid #e2dede;
+            }
+            .select-table-detail .td{
+                width: 400px; height: 50px;
+                text-align: left;
+                padding: 10px;
+            }
+            .select-table-detail .td2{
+                font-family: 'Poor Story',sans-serif;
+                font-size: 15pt;
+                width:150px; height:50px; background-color: rgb(238, 235, 235);
+                text-align: center;
+          
+            }
+
+        </style>
+    </head>
+    <body>
+            <div id="main-div">
+            <div id="main-title"></div>
+            <div id="main-category"></div>
+            <div id="main-content" >
+        <div id="selectContent">
+                    <div class="select-infor">
+                        <div class="select-value">
+                            <div class="select-image"><img src="<%=data.mainImage%>" style="width:600px;height:450px;"/></div>
+                            <div class="select-image-infor"><br>
+                                <% for(var i=0; i < data.listImage.length; i++){ %>
+                                    <img src="<%=data.listImage[i]%>" style="width:100px;height:100px; cursor: pointer;" onclick="show('<%=data.listImage[i]%>')"/>
+                                <%} %>
+                            </div>
+                        </div>
+                        
+                        <div class="select-value">
+                            <table class="select-table">
+                                <tr style="text-align:left;"><td style="width:100px; height:50px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">업체명</td><td style="font-weight:bold;font-size:18pt"><%= data.restaurant %></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:50px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">업종</td><td><%= data.kinds %></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:50px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">전화번호</td><td> <%= data.tel %></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:100px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">주소</td><td> <%= data.address %></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:60px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">평점</td><td> <%= data.score %></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:60px; font-size:14pt;font-family: 'Noto Sans KR',sans-serif; color:rgb(102, 153, 235);">공유하기</td><td><img src="/index/image/트위터.jpg" alt="트위터" style="padding:10px;width:30px;height: 30px;"/>
+                                    <img src="/index/image/페이스북.png" alt="페이스북" style="padding:10px;width:30px;height: 30px;"/><img src="/index/image/인스타그램.png" alt="인스타그램"style="padding:10px;width:30px;height: 30px;"/></td></tr>
+                                <tr><td style="width:100px; height:200px;"></td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="height:100px"></div>
+                    <div style="width:1300px; display:inline-block; height:100px; text-align: left; font-weight: bold; font-size: 20pt;">상세정보<hr></div>
+                    <div class="select-infor">
+                        <div class="select-value">
+                            <table class="select-table-detail" cellspacing=0>
+                                <tr ><td style="width:150px; height:60px; background-color: rgb(238, 235, 235); font-family: 'Poor Story',sans-serif; font-size: 15pt;" >영업시간</td><td colspan="3" style=" text-align: left; padding: 10px;"> <%= data.time %></td></tr>
+                                <tr ><td style="width:150px; height:60px; background-color: rgb(238, 235, 235); font-family: 'Poor Story',sans-serif; font-size: 15pt;">휴일</td><td  colspan="3" style=" text-align: left; padding: 10px;"><%= data.holiday %></td></tr>
+                                <tr ><td class="td2">좌석/룸/기타</td><td  class="td"><%= data.seat %></td><td class="td2">주류판매</td><td class="td"><%= data.mainstream %></td></tr>
+                                <tr ><td class="td2">금연석</td><td  class="td"><%= data.smoke %></td><td class="td2">예약정보</td><td class="td"><%= data.reservation %></td></tr>
+                                <tr ><td class="td2">화장실</td><td  class="td"><%= data.restroom %></td><td class="td2">배달/포장</td><td class="td"><%= data.delivery %></td></tr>
+                                <tr ><td class="td2">주차</td><td  class="td"> <%= data.parking %></td><td class="td2">기타시설</td><td class="td"><%= data.Etc %></td></tr>
+                                <tr><td style="width:150px; height:150px; background-color: rgb(238, 235, 235); font-family: 'Poor Story',sans-serif; font-size: 15pt;">맛집소개</td><td colspan="3" style=" text-align: left; padding: 10px;"><%= data.infor %></td></tr>
+                            </table>
+                        </div>
+                       
+                    </div>
+                    <div style="width:1300px; display:inline-block; height:100px; text-align: left; font-weight: bold; font-size: 20pt;">지도<hr></div>
+                    <div id="map_canvas" style="width:1300px;height:500px;  margin: 40px;"></div>
+        </div>
+        
+    </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <script src="/index/jquery_ui/jquery/jquery.js"></script>
+            <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <script>
+            var sel_files = [];
+            $(function(){
+                $('#listPhoto').on('change',handleImgFileSelect);
+            })
+            function readfile() {
+                var upload = document.getElementById('mainPhoto').files[0];
+                
+                var reader = new FileReader();
+                    reader.onload = function (event) {
+                    var img = new Image(600,450);
+                    img.src = event.target.result;
+                    $('.select-image').html(img);
+                   
+                };
+                reader.readAsDataURL(upload);
+
+                return false;
+            };
+
+            function handleImgFileSelect(e){
+                $('.select-image-infor').text('');
+                sel_files = [];
+
+                var files = e.target.files;
+                var filesArr = Array.prototype.slice.call(files);
+
+                var index = 0;
+                filesArr.forEach(function(f){
+                    sel_files.push(f);
+
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        var html = '<img style="width:100px;height:100px;"src="'+e.target.result+'"/>';
+                        $('.select-image-infor').append(html);
+                        index++;
+                    }
+                    reader.readAsDataURL(f);
+                });
+            }
+            
+        </script>
+        <style>
+            #selectContent{
+                text-align: center;
+                border: 1px solid;
+                border-color: #D8D8D8;
+                border-radius: 5px;
+            }
+            .select-infor{width:1300px; display: inline-block;}
+            .select-infor .select-value{height:600px;width:600px; display: block; float: left; margin: 20px;}
+            .select-infor .select-image{height:450px;width:600px; border: 1px solid black;}
+            .select-infor .select-image-infor{height:150px;width:600px; border: 1px solid black;}
+            .select-value .select-table{
+                height:600px;width:600px; 
+            }
+            hr{
+                width: 1300px; height: 1px; border: 1px solid black; background-color: black; border-radius: 10px;
+            }
+            .select-value .select-table-detail{
+                
+                width: 1300px; height:600px; margin: -20px;
+
+                border-top: 1px solid #444444;
+                border-bottom: 1px solid #444444;
+                border-collapse: collapse;
+   
+
+                
+            }
+            .select-table-detail tr td{
+                border-bottom: 1px solid #e2dede;
+            }
+            .select-table-detail .td{
+                width: 400px; height: 50px;
+                text-align: left;
+                padding: 10px;
+            }
+            .select-table-detail .td2{
+                width:150px; height:50px; background-color: rgb(238, 235, 235);
+                text-align: center;
+          
+            }
+        </style>
+    </head>
+    <body>
+        <div id="selectContent">
+                <form id="uploadForm" enctype="multipart/form-data" action="/write/upload" method="post">
+                    <div class="select-infor">
+                        <div class="select-value">
+                            <div class="select-image" >메인에 보여질 사진을 올려주세요!</div>
+                           
+                                <input type="file" name="mainPhoto"  multiple id="mainPhoto" onchange="readfile()"/> 
+                            <div class="select-image-infor"> 
+                           <br>사진 목록을 올려주세요!</div><input type="file" name="listPhoto"  multiple id="listPhoto" />
+                        </div>
+                        
+                        <div class="select-value">
+                            <table class="select-table">
+                                <tr style="text-align:left;"><td style="width:100px; height:50px;">업체명</td><td><input type="text" name="restaurant"></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:50px;">업종</td><td><input type="text" name="kinds" placeholder="ex) 중식,일식"></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:50px;">전화번호</td><td><input type="text" name="tel" placeholder="전화번호"></td></tr>
+                                <tr style="text-align:left;"><td style="width:100px; height:100px;">주소</td><td><textarea name="address" style="width:200px; height:100px;"></textarea></td></tr>
+
+                                <tr><td style="width:100px; height:200px;"></td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="height:100px"></div>
+                    <div style="width:1300px; display:inline-block; height:100px; text-align: left; font-weight: bold; font-size: 20pt;">상세정보<hr></div>
+                    <div class="select-infor">
+                        <div class="select-value">
+                            <table class="select-table-detail" cellspacing=0>
+                                <tr ><td style="width:150px; height:60px; background-color: rgb(238, 235, 235);">영업시간</td><td colspan="3" style="text-align:left;"><input type="text" name="time" style="width:200px;"></td></tr>
+                                <tr ><td style="width:150px; height:60px; background-color: rgb(238, 235, 235);">휴일</td><td  colspan="3" style="text-align:left;"><input type="text" name="holiday" style="width:200px;"></td></tr>
+                                <tr ><td class="td2">좌석/룸/기타</td><td  class="td"> <input type="text" name="seat" style="width:200px;"></td><td class="td2">주류판매</td><td class="td"> <input type="text" name="mainstream" style="width:200px;"></td></tr>
+                                <tr ><td class="td2">금연석</td><td  class="td"> <input type="text" name="smoke" style="width:200px;"></td><td class="td2">예약정보</td><td class="td"> <input type="text" name="reservation" style="width:200px;"></td></tr>
+                                <tr ><td class="td2">화장실</td><td  class="td"> <input type="text" name="restroom" style="width:200px;"></td><td class="td2">배달/포장</td><td class="td"> <input type="text" name="delivery" style="width:200px;"></td></tr>
+                                <tr ><td class="td2">주차</td><td  class="td"> <input type="text" name="parking" style="width:200px;"></td><td class="td2">기타시설</td><td class="td"> <input type="text" name="Etc" style="width:200px;"></td></tr>
+                                <tr><td style="width:150px; height:150px; background-color: rgb(238, 235, 235);">맛집소개</td><td colspan="3" style="text-align:left;"><textarea name="infor" style="width:400px; height:200px;"></textarea></td></tr>
+                            </table>
+                        </div>
+                       
+                    </div>
+                    <input type="submit"></form>
+                </div>
+    </body>
+</html>

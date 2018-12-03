@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Hi+Melody&amp;subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cute+Font&amp;subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Hi+Melody" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <style>
+    .main-title{
+        display: inline-block;
+        height: 80px;
+        width: 1400px;
+    }
+    .main-title-header{
+        margin: 5px;
+        font-size: 35pt;
+        font-family: 'Hi Melody',sans-serif;
+        float: left;
+        color: red;
+        font-weight: bold;
+       
+    }
+    .main-title-header2{
+        margin: 10px;
+        font-size: 25pt;
+        font-family: 'Cute Font',sans-serif;
+        float: left;
+        color: black;
+       
+    }
+
+    .main-title-member{
+        float: right;
+        font-size: 10pt;  
+        padding: 5px; 
+        color:rgb(126, 126, 126);
+        text-decoration: none;
+    }
+    .main-title-member:visited{text-decoration: none;color:rgb(126, 126, 126);}
+    .main-title-member:hover{text-decoration: none;color:rgb(126, 126, 126);}
+    .main-login-form{
+        border-radius: 2px;
+        border: 1px solid rgb(211, 214, 214);
+        width: 250px;
+        height: 30px;
+    }
+    .main-login-button{
+        border-radius: 10px;
+        width: 80px;
+        height: 80px;
+        background: rgb(250, 162, 0);
+        border: 1px solid rgb(245, 202, 133);
+
+        color: white;
+        font-weight: bold;
+    }
+    .ui-dialog-title{
+        color:white;
+        font-size: 15pt;
+        font-family: 'Hi Melody' ,sans-serif;
+    }
+    a{text-decoration: none;}
+    </style>
+    <script>
+        $(function(){
+
+            $('.main-title-member').click(function(){
+                $('#login-dialog').dialog({
+ 
+                    modal:true,
+                    width:380,
+                    height:200,
+                }).prev(".ui-dialog-titlebar").css("background","#73bdee");;
+            });
+            $.ajax({
+                url:"/login/ing",
+                type:"get",
+                success:function(result){
+                    if(result.result != undefined)
+                    $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.result+'님 환영합니다</span>')
+                }
+            })
+            
+        })
+        function login(){
+            alert($('#login_id2').val());
+            $.ajax({
+                url:'/login',
+                type:'post',
+                data:{loginid:$('#login_id2').val(), loginpwd:$('#login_pwd').val()},
+                success:function(result){
+                    $('#login-dialog').dialog('close');
+                    if(result.id != undefined)
+                    $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.id+'님 환영합니다</span>');
+                }
+            })
+        }
+      
+    </script>
+</head>
+<body>
+    <div class="main-title">
+        <a href="/" id="main"><span class="main-title-header">맛고</span>  <span class="main-title-header2">전국맛집찾기</span></a>
+        <span class="login_1"><a href="/signup" class="main-title-member"  >회원가입</a>
+        <a href="#" class="main-title-member"  > 로그인</a></span>
+    </div>
+
+    <div id="login-dialog" title="로그인" style="display:none;">
+            <table id="signup-form">
+                <tr>
+                    <td style="float:right;"><input id="login_id2" type="text" placeholder="아이디" class="main-login-form"/></td>
+                    <td rowspan="2"><button class="main-login-button" onclick="login()" style="cursor: pointer;">로그인</button></td>
+                </tr>
+                <tr><td style="float:right;"><input id="login_pwd" type="password" placeholder="비밀번호" class="main-login-form"/></td></tr>  
+                <tr><td style="float:right;"><a href="/signup"> 회원가입 </a>/ 아이디 찾기</td></tr>    
+            </table>
+
+    </div>
+</body>
+</html>

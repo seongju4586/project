@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style>
+                .member-paging{
+                    text-align: center;
+                }
+                .member-paging .member-a:hover{text-decoration: none}
+                .member-paging .member-a:visited{text-decoration: none}
+                .member-paging .member-a{text-decoration: none}
+
+            </style>
+            <script src="/index/jquery_ui/jquery/jquery.js"></script>
+            <script src="/index/jquery_ui/jquery-ui.js"></script>
+            <script>
+                $(function(){
+                    $('#member-list').load('/member/list/1');
+                })
+                function member_next(){
+                    var total = parseInt($('#member-total').text());
+                    var page = parseInt($('#member-page').text());
+                    page = page +1 ;
+                    if( page  <= total){
+                        $.ajax({
+                            url: '/member/list/'+page,
+                            type: 'get',
+                            success: function(){
+                                $('#member-list').text('');
+                                $('#member-list').load('/member/list/'+page);
+                                $('#member-page').text(page);
+                            }
+                        })
+                    } 
+                }
+                function member_prev(){
+                    var total = parseInt($('#member-total').text());
+                    var page = parseInt($('#member-page').text());
+                    page = page - 1 ;
+                    if( 0 < page){
+                        $.ajax({
+                            url: '/member/list/'+page,
+                            type: 'get',
+                            success: function(){
+                                $('#member-list').text('');
+                                $('#member-list').load('/member/list/'+page);
+                                $('#member-page').text(page);
+                            }
+                        })
+                    } 
+                }
+            </script>
+    </head>
+    <body>
+        <div id="member-list"></div>
+        <div class="member-paging">
+            <a href="#" class="member-a" onclick="member_prev()"><</a>
+            <span id="member-page"> 1 </span> / <span id="member-total"> <%= total %> </span>
+            <a href="#"  class="member-a"  onclick="member_next()">></a>
+        </div>
+    </body>
+</html>

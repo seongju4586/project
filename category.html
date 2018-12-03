@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style>
+                img{
+                    position: relative;
+                    margin: -5px;
+                }
+                    .zeta-login .search{
+                        margin: -4px;
+                        border-radius: 10px;
+                        border: 2px solid rgb(240, 240, 245);
+                        width: 20%;
+                        height: 23px;
+                        background-color: rgb(235, 235, 236);
+                    }
+                    .zeta-menu-bar {
+                        background-color:white;
+                      display: inline-block;
+                      width: 1400px;
+                      
+                    }
+                    .zeta-menu-bar .ht{
+                        height: 2px;
+                        background-color: black;
+                        border-radius: 10px;
+                        border:1px solid black;
+                    }
+                    .zeta-menu { margin: 0; padding: 0; }
+                    .zeta-menu li {
+                      background-color:white;
+                      float: left;
+                      list-style:none;
+                      position: relative;
+                      z-index: 1;
+                    }
+                    .zeta-menu li:hover { text-decoration: black; background-color:white;}
+                    .zeta-menu li:hover>a { color: black; background-color:white;}
+                    .zeta-menu{ background-color:white;}
+                    .zeta-menu a {
+                      color: black;
+                      display: block;
+                      width: 80px;
+                      height: 22px;
+                      font-weight: bold;
+                      text-decoration: none;
+                      background-color:white;
+
+                    }
+                    .zeta-menu ul{
+                        background-color:white;
+                      display: none;
+                      padding: 0;
+                      text-decoration: black;
+                      position: absolute;
+                      height: 35px;
+                      left: 0;
+                     
+                      top: 100%;
+                      width: 150px;
+                    }
+                    .zeta-login{
+                        text-align: right;
+                        margin: -5px;
+                        background-color:white;
+                    }
+                    .zeta-menu ul li { 
+                       
+                      float: none; color: black;
+                      border: 1px solid silver;
+                      background-color:white;
+                      display: block;
+                      padding: 10px 30px;
+                      font-weight: bold;
+                      cursor: pointer;}
+                      
+                    .zeta-menu ul li:hover {text-decoration-line: underline; }
+                    .zeta-menu ul li:hover a { color: black; }
+                    .zeta-menu ul a { color: black; }
+                    .zeta-menu ul ul { left: 100%; top: 0; }
+                    .zeta-menu ul ul li {float:left; margin-right:10px; }
+                    .jbFixed {
+                        position: fixed;
+                        top: 0px;
+                        background-color:white;
+                        display: block;
+                        width: 1400px;
+                        height: 40px;
+                        float: center;
+                        z-index: 1;
+                        
+                    }
+
+                    </style>
+                     
+                    <link rel="stylesheet" href="/index/css/jquery-ui.min.css">
+                    <script src="/index/jquery_ui/jquery/jquery.js"></script>
+                    <script src="/index/jquery_ui/jquery-ui.js"></script>
+                    <script>
+                       
+                    $(function(){
+                        
+
+                      $(".zeta-menu li").hover(function(){
+                        $('ul:first',this).show();
+                      }, function(){
+                        $('ul:first',this).hide();
+                      });
+                      var jbOffset = $( '.zeta-menu-bar' ).offset();
+                      $( window ).scroll( function() {
+                        if ( $( document ).scrollTop() > jbOffset.top ) {
+                            $( '.zeta-menu-bar' ).addClass( 'jbFixed' );
+                        }
+                        else {
+                            $( '.zeta-menu-bar' ).removeClass( 'jbFixed' );
+                        }
+                        });
+
+
+                    });
+                    function member(){
+                  
+                        $('#member-management').dialog({
+                                        title: '회원관리',
+                                        width: 1100,
+                                        height: 620,
+                                        modal:true, 
+                                        buttons:{
+                                            "저장":function(){
+                                                var aa = new Array();
+                                                $('.id_check').each(function(){
+                                                    var al = $(this).text();
+                                                    aa.push(al);
+                                                });
+                                                var aa2 = new Array();
+                                                $('select option:selected').each(function(idx){ 
+                                                    var value = $(this).val();
+                                                    aa2.push(value);
+                                                })
+                                                $.ajax({
+                                                    url: '/member/save',
+                                                    type: 'get',
+                                                    data:{id:aa,authority:aa2},
+                                                    success: function(){
+                                                        alert('저장되었습니다');
+                                                        $('#member-management').dialog('close');
+                                                        location.reload();
+                                                    }
+                                                }) 
+                                            },'닫기':function(){
+                                                $('#member-management').dialog("close");
+                                            }
+                                        }
+                                    });
+                       
+                    }
+
+                    function Etc(e){
+                        location.href = '/site/Etc/'+e;
+                    }
+
+            </script>
+    </head>
+    <body>    
+            <div class='zeta-menu-bar'>
+                <hr class="ht">
+                <ul class="zeta-menu" >
+                    <li><a href="/" id="home" class="bbc">홈</a></li>
+                
+                    <li ><a href="/site/seoul?page=1" id="seoul">서울</a></li>
+
+                    <li><a href="/site/incheon?page=1" id="incheon">인천</a></li>
+
+                    <li><a href="/site/daejeon?page=1" id="daejeon">대전</a></li>
+
+                    <li ><a href="/site/daegu?page=1" id="daegu">대구</a></li>
+
+                    <li><a href="/site/busan?page=1"  id="busan">부산</a></li>
+
+                    <li ><a href="#">더 보기</a>
+                        <ul >
+                            <li id="tip" onclick="Etc(this.id)">꿀팁</li>
+                            <li id="funny" onclick="Etc(this.id)">유머</li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <div class="zeta-login" > 
+                  <input type="text" class="search">
+                  <img src="/index/image/search.svg" alt="찾기"></img>
+                  <hr style="border:1px solid rgb(214, 212, 212);">
+                </div>
+               
+            </div>
+           
+            <div id="member-management" title="회원관리" style="display: none"></div>
+
+
+    </body>
+</html>

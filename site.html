@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>맛집사이트 : 맛Go</title>
+        <link href="https://fonts.googleapis.com/css?family=Gamja+Flower" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Serif+KR" rel="stylesheet">
+        <style>
+            #main-div{text-align: center;  }
+            #main-title{text-align: center;}
+            #main-category{
+                display: inline-block;
+                text-align: center;
+                width: 1400px;
+
+            }
+            #main-content{
+                display: inline-block;
+                width: 1400px;
+                height: auto;
+                overflow: hidden;
+            }
+            #main-end{
+                display: inline-block;
+                width: 1400px;
+                color: rgb(175, 172, 172);
+                font-size: 15pt;
+            }
+            #main-content .show{
+                text-align: left;
+                width: 1400px;
+                height: 1100px;
+            }
+            #main-content .show2{
+                text-align: left;
+                width: 1400px;
+                height: 900px;
+            }
+            #main-content .image{
+                margin: 80px;
+                position: relative;
+                width: 2700px;
+                height: 640px;
+                overflow: hidden;
+                color: black;
+            }
+            #main-content .image2{
+                margin: 80px;
+                width: 1250px;
+                position: relative;
+            }
+            #main-content .font{
+                margin: 80px;
+                font-weight: bold;
+                font-size: 16pt;
+            }
+            #main-content .image .aa .value{
+                width: 410px;
+                border: 1px solid black;
+                float: left;
+
+            }
+            #main-content .image .value .show-image{width: 250px;height: 200px;float: left;}
+            #main-content .image .value .show-image img{width: 250px;height: 200px;float: left;}
+            #main-content .image .value .show-content{margin: 5px;width: 150px;height: 200px;float: left;}
+            #main-content .image2 .value .show-image{width: 250px;height: 200px;float: left;}
+            #main-content .image2 .value .show-image img{width: 250px;height: 200px;float: left;}
+            #main-content .image2 .value .show-content{margin: 5px;width: 150px;height: 200px;float: left;}
+            .score{
+                margin: 5px;
+                color: rgb(255, 115, 0);
+                font-weight: bold;
+                font-size: 18pt;
+            }
+
+            .name{
+                font-family: 'Gamja Flower' ,sans-serif;
+                color:black;
+                font-size: 17pt;
+            }
+            .name2{
+                font-family: 'Do Hyeon' ,sans-serif;
+                color:black;
+                font-size: 17pt;
+            }
+            a{color:black};
+            a:hover{color:black};
+            a:visited{color: black;}
+            .main-paging-right{
+                position:relative; left:800px; top:600px; font-size: 80pt; color:rgb(199, 199, 206); cursor: pointer;
+            }
+            .main-paging-left{
+                position:relative; right:800px; top:600px; font-size: 80pt; color:rgb(199, 199, 206);cursor: pointer;
+            }
+            .image-page{
+               
+                position: relative;
+                width: 1320px;
+                float: left;
+                color: black;
+            }
+            li{
+                list-style:none;
+                float: left;
+            }
+            ul{
+                position: relative;
+                list-style:none;
+            }
+        </style>
+        <script src="/index/jquery_ui/jquery/jquery.js"></script>
+        <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <script>
+                var idx = 0;
+                var slidemax=2;
+                var pos= 300;
+                var gg = '';
+                var page1 = '';
+                var page2 = '';
+            $(function(){
+                
+           
+                $('#main-category').load('/category');
+                $('#main-title').load('/a/main.html');
+                
+                
+                $.ajax({
+                    url:'/main/inf',
+                    type:'get',
+                    success: function(result){
+                        
+                        var b = '';
+                        var b = '<li><div class="image-page">';
+                        for(var i=0; i<9; i++){
+                            var e = String(result.result[i].infor);
+                            e = e.substring(0,20) + '...';
+                            var f = String(result.result[i].address);
+                            f = f.split(' ');
+                  
+                          
+                            b += '<a href="/select?id='+result.result[i].id+'">';
+                            b += '<div class="value"><div class="show-image">';
+                            b += '<img src="'+result.result[i].mainImage+'" alt="청담동">';
+                            b += '</div><div class="show-content"><span class="score">'+result.result[i].score;
+                            b += '</span><br><span class="name">'+result.result[i].restaurant+'</span><br><span class="region">'
+                            b += f[2]+'</span><p> <span class="infor">매장소개<br>' ; 
+                            b += e+'</span></div></a>';
+                           
+                            
+                        } 
+                        b += '</div></li>';
+                        page1 = b;
+                        $('.image ul').append(b);
+
+                         var c = '';
+                         var c = '<li><div class="image-page">';
+                        for(var i=9; i<18; i++){
+                            var e = String(result.result[i].infor);
+                            e = e.substring(0,20) + '...';
+                            var f = String(result.result[i].address);
+                            f = f.split(' ');
+
+                            c += '<a href="/select?id='+result.result[i].id+'">';
+                            c += '<div class="value"><div class="show-image">';
+                            c += '<img src="'+result.result[i].mainImage+'" alt="청담동">';
+                            c += '</div><div class="show-content"><span class="score">'+result.result[i].score;
+                            c += '</span><br><span class="name">'+result.result[i].restaurant+'</span><br><span class="region">'
+                            c += f[2]+'</span><p> <span class="infor">매장소개<br>' ; 
+                            c += e+'</span></div></a>';
+                           
+                            
+                        } 
+                        c += '</div></li>';
+                        page2 = c;
+                        $('.image ul').append(c);
+                    
+                      
+                    }
+                })
+                var $panel = $(".image").find("ul");
+ 
+                var itemWidth = $panel.children().width(); 
+                var itemLength = $panel.children().length;      
+
+                var rollingId2;
+                auto();
+
+
+                $panel.mouseover(function() {
+                    clearInterval(rollingId2);
+                    
+                });
+ 
+                // 배너 마우스 아웃 이벤트
+                $panel.mouseout(function() {
+                    auto();
+                });
+                function auto() {
+ 
+                    // 2초마다 start 호출
+                    rollingId2 = setInterval(function() {
+                        start();
+                    }, 2000);
+                }
+                function start() {
+                    $panel.css("width", '2700');
+                    $panel.animate({"left": -1317 + "px"},3000, function() {
+                        $(this).append("<li>" + $(this).find("li:first").html() + "</li>");
+ 
+                        $(this).find("li:first").remove();
+ 
+                        $(this).css("left", 0);
+                    });
+                }
+  
+           
+
+            });
+        </script>
+    </head>
+    <body>
+        <div id="main-div">
+             
+            <div id="main-title"></div>
+            <div id="main-category"></div>
+            <div id="main-content" >
+
+                    <div class="show">
+                            <br><span class="font">당신을 위한 이 지역 HOT 매장추천 </span>
+                            <div class="image">
+                                <ul>
+                                    
+                                </ul>
+                            </div>
+                            
+                     
+                        </div>
+                        <hr>
+
+                        <div class="show2">
+                                <br><span class="font">맛집 생생후기 </span>
+                                <div class="image2">
+                                    <div style="width:1200px; height:30px; text-align: left; font-weight: bold; font-size: 16pt; font-family: Noto Serif KR,sans-serif;">빵집편</div><br>
+                                        <a href="https://www.siksinhot.com/theme/magazine/1953">
+                                        <div class="value">
+                                                <div class="show-image">
+                                                    <img src="/index/image/빵집-1.jpg" alt="빵집">
+                                                </div>
+                                                <div class="show-content">
+                                                    <span class="name2">혜자미 뿜뿜! <br>충청도 빵집 5곳</span><br>
+                                                    <p>
+                                                    <span class="infor">충청도는 특유의 느긋함과 구수한 사투리로 편안한 느낌이..</span>
+                                                </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="https://www.siksinhot.com/theme/magazine/1953">
+                                        <div class="value">
+                                                <div class="show-image">
+                                                    <img src="/index/image/빵집-2.jpg" alt="성심당">
+                                                </div>
+                                                <div class="show-content">
+                                                    <span class="name2">오며가며 들리기 좋은 대전 빵집 7곳</span><br>
+                                                    <p>
+                                                    <span class="infor">경부,호남,중부 고속도로 등 주요 고속도로가 연결되는 교통..</span>
+                                                </div>
+                                        </div>
+                                        <div class="value">
+                                                <div class="show-image">
+                                                    <img src="/index/image/빵집-3.jpg" alt="청담동">
+                                                </div>
+                                                <div class="show-content">
+                                                    <span class="name2">빵까지 맛있는!<br>맛의 고장 전라도 빵집</span><br>
+                                                    <p>
+                                                    <span class="infor">음식 맛이 맛있기로 소문난 전라도. 전라도 곳곳에는 음식만큼이나 다양한 특..</span>
+                                                </div>
+                                        </div>
+                                </div>
+                            </a>
+                            
+
+                                <div><br><span class="font"></span></div>
+                                <div class="image2">
+                                    <div style="width:1200px; height:30px; text-align: left; font-weight: bold; font-size: 16pt; font-family: Noto Serif KR,sans-serif;">떡집편</div><br>
+                                        <div class="value">
+                                                <div class="show-image">
+                                                    <img src="/index/image/떡집-1.jpg" alt="떡집">
+                                                </div>
+                                                <div class="show-content">
+                                                    <span class="name2">개성 넘치는
+                                                            부산 떡 맛집 5곳</span><br>
+                                                    <p>
+                                                    <span class="infor">멥쌀로 만든 '앙꼬절편'이 한 TV 프로그램에 방영되며 급물살을 타기 시작한 ..</span>
+                                                </div>
+                                        </div>
+                                        <div class="value">
+                                                <div class="show-image">
+                                                    <img src="/index/image/떡집-2.jpg" alt="떡집">
+                                                </div>
+                                                <div class="show-content">
+                                                    <span class="name2">명절에 나눠 먹기 좋은!
+                                                            택배되는 전국 떡 맛집 5</span><br>
+                                                    <p>
+                                                    <span class="infor">명절 하면 생각나는 대표 간식 '떡'. 떡은 특유의 쫄깃한 맛은 물론 다양한 ..</span>
+                                                </div>
+                                        </div>
+                                        <div class="value">
+                                                <div class="show-image">
+                                                        
+                                                    </div>
+                                                    <div class="show-content">
+                                                        <span class="name2">
+                                                                </span><br>
+                                                        <p>
+                                                        <span class="infor"></span>
+                                                    </div>
+                                        </div>
+                                </div>
+
+                                
+                                <div><br><span class="font"></span></div>
+                                <div class="image2">
+                                        <div style="width:1200px; height:30px; text-align: left; font-weight: bold; font-size: 16pt; font-family: Noto Serif KR,sans-serif;">여행추천맛집</div><br>
+                                            <div class="value">
+                                                    <div class="show-image">
+                                                        <img src="/index/image/대만.png" alt="대만">
+                                                    </div>
+                                                    <div class="show-content">
+                                                        <span class="name2">대만여행 필수코스 <br>대만 3대 망고 빙수 투어</span><br>
+                                                        <p>
+                                                        <span class="infor">망고가 유명한 대만 ! 그 중에서도 빙수는 대만 3대..</span>
+                                                    </div>
+                                            </div>
+                                            <div class="value">
+                                                    <div class="show-image">
+                                                        <img src="/index/image/홍콩.png" alt="홍콩">
+                                                    </div>
+                                                    <div class="show-content">
+                                                        <span class="name2">추석 연휴 가족과 함께 가기 좋은, 홍콩 맛집</span><br>
+                                                        <p>
+                                                        <span class="infor">화려한 야경이 매력적인 도시 '홍콩'. 홍콩은 디지..</span>
+                                                    </div>
+                                            </div>
+                                            <div class="value">
+                                                    <div class="show-image">
+                                                        <img src="/index/image/제주도.png" alt="제주도">
+                                                    </div>
+                                                    <div class="show-content">
+                                                        <span class="name2">제주 주민이 추천한 제주 빵집 BEST 11</span><br>
+                                                        <p>
+                                                        <span class="infor">이국적인 느낌으로 내국인에게도외국인들에게도 인기가 많은..</span>
+                                                    </div>
+                                            </div>
+                                    </div>
+                                
+
+                                
+                        </div>
+            </div>
+
+            <div id="main-end">
+                <hr>(주)맛고 대전시 서구 월평대로 2 사업자등록번호 123-34-5678 통신판매신고 123-4567-89호<br>
+                대표이사 홍길동 대표전화 042-555-5555 Fax 050-1234-1234 naver@naver.com<p>copyright (주)맛고 Allright reserved</p>
+            </div>
+
+            <input type="hidden" id="region_id"/>
+            <input type="hidden" id="region_type"/>
+            <input type="hidden" id="region_region"/>
+            <input type="hidden" id="login_id"/>
+            <input type="hidden" id="login_write" value="0"/>
+            <input type="hidden" id="login_delete" value="0"/>
+            <input type="hidden" id="login_grade" value="0"/>
+            <input type="hidden" id="login_check" value="0"/>
+        </div>
+    </body>
+</html>

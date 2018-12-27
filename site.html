@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="shortcut icon" href="/index/image/치킨.ico">
         <title>맛집사이트 : 맛Go</title>
         <link href="https://fonts.googleapis.com/css?family=Gamja+Flower" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet">
@@ -110,6 +111,7 @@
         </style>
         <script src="/index/jquery_ui/jquery/jquery.js"></script>
         <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <script src="/index/js/bootstrap.js"></script>
         <script>
                 var idx = 0;
                 var slidemax=2;
@@ -204,7 +206,7 @@
                 }
                 function start() {
                     $panel.css("width", '2700');
-                    $panel.animate({"left": -1317 + "px"},3000, function() {
+                    $panel.animate({"left": -1317 + "px"},8000, function() {
                         $(this).append("<li>" + $(this).find("li:first").html() + "</li>");
  
                         $(this).find("li:first").remove();
@@ -219,11 +221,11 @@
         </script>
     </head>
     <body>
-        <div id="main-div">
+        <div id="main-div" >
              
             <div id="main-title"></div>
             <div id="main-category"></div>
-            <div id="main-content" >
+            <div id="main-content">
 
                     <div class="show">
                             <br><span class="font">당신을 위한 이 지역 HOT 매장추천 </span>

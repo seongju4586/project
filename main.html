@@ -69,27 +69,38 @@
     </style>
     <script>
         $(function(){
-
+            
             $('.main-title-member').click(function(){
                 $('#login-dialog').dialog({
  
                     modal:true,
                     width:380,
                     height:200,
-                }).prev(".ui-dialog-titlebar").css("background","#73bdee");;
+                }).prev(".ui-dialog-titlebar").css("background","#73bdee");
             });
             $.ajax({
                 url:"/login/ing",
                 type:"get",
                 success:function(result){
                     if(result.result != undefined)
-                    $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.result+'님 환영합니다</span>')
+                    {
+                        if(result.result == 'admin'){
+                            $('#checking_id').val(result.result);
+                            $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.result+'님 환영합니다</span><a href="#" onclick="member()"><span class="main-title-member">회원관리</span></a><a href="/write"><span class="main-title-member">맛집추가</span></a>');
+                            $('.btn-default').show();
+                        }else{
+                            $('#checking_id').val(result.result);
+                            $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.result+'님 환영합니다</span>');
+                            $('.btn-default').show();
+                        }
+                       
+                    }
+                    
                 }
             })
             
         })
         function login(){
-            alert($('#login_id2').val());
             $.ajax({
                 url:'/login',
                 type:'post',
@@ -97,11 +108,58 @@
                 success:function(result){
                     $('#login-dialog').dialog('close');
                     if(result.id != undefined)
-                    $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.id+'님 환영합니다</span>');
+                    {
+                        if(result.id == 'admin'){
+                            $('#checking_id').val(result.id);
+                            $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.id+'님 환영합니다</span><a href="#" onclick="member()"><span class="main-title-member" >회원관리</span></a><a href="/write"><span class="main-title-member">맛집추가</span></a>');
+                            $('.btn-default').show();
+                        }else{
+                            $('#checking_id').val(result.id);
+                            $('.login_1').html('<a href="/logout" class="main-title-member"  >로그아웃</a><span class="main-title-member">'+result.id+'님 환영합니다</span>');
+                            $('.btn-default').show();
+                        }
+                       
+                    }
+                   
                 }
             })
         }
-      
+        function member(){
+                  $('#member-management').load('/member/list/1');
+                  $('#member-management').dialog({
+                                  title: '회원관리',
+                                  width: 1100,
+                                  height: 620,
+                                  modal:true, 
+                                  buttons:{
+                                      "저장":function(){
+                                          var aa = new Array();
+                                          $('.id_check').each(function(){
+                                              var al = $(this).text();
+                                              aa.push(al);
+                                          });
+                                          var aa2 = new Array();
+                                          $('select option:selected').each(function(idx){ 
+                                              var value = $(this).val();
+                                              aa2.push(value);
+                                          })
+                                          $.ajax({
+                                              url: '/member/save',
+                                              type: 'get',
+                                              data:{id:aa,authority:aa2},
+                                              success: function(){
+                                                  alert('저장되었습니다');
+                                                  $('#member-management').dialog('close');
+                                                  location.reload();
+                                              }
+                                          }) 
+                                      },'닫기':function(){
+                                          $('#member-management').dialog("close");
+                                      }
+                                  }
+                              }).prev(".ui-dialog-titlebar").css("background","#73bdee");
+                 
+              }
     </script>
 </head>
 <body>
@@ -122,5 +180,7 @@
             </table>
 
     </div>
+    <div id="member-management" title="회원관리" style="display: none"></div>
+    <input type="hidden" id="checking_id">
 </body>
 </html>

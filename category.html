@@ -4,15 +4,26 @@
             <style>
                 img{
                     position: relative;
-                    margin: -5px;
+               
                 }
                     .zeta-login .search{
-                        margin: -4px;
-                        border-radius: 10px;
-                        border: 2px solid rgb(240, 240, 245);
+                     
+                        border: none;
                         width: 20%;
-                        height: 23px;
+                        height: 30px;
                         background-color: rgb(235, 235, 236);
+                    }
+                    input.img-button {
+                        vertical-align: middle;
+                        background: url( "/index/image/search.svg" ) no-repeat;
+                        background-color: rgb(235, 235, 236);
+                        border: none;
+                        width: 32px;
+                        height: 33px;
+                        cursor: pointer;
+                        position: relative;
+                        left: 6px;
+                        top:-1px;
                     }
                     .zeta-menu-bar {
                         background-color:white;
@@ -91,6 +102,7 @@
                         
                     }
 
+
                     </style>
                      
                     <link rel="stylesheet" href="/index/css/jquery-ui.min.css">
@@ -118,45 +130,16 @@
 
 
                     });
-                    function member(){
-                  
-                        $('#member-management').dialog({
-                                        title: '회원관리',
-                                        width: 1100,
-                                        height: 620,
-                                        modal:true, 
-                                        buttons:{
-                                            "저장":function(){
-                                                var aa = new Array();
-                                                $('.id_check').each(function(){
-                                                    var al = $(this).text();
-                                                    aa.push(al);
-                                                });
-                                                var aa2 = new Array();
-                                                $('select option:selected').each(function(idx){ 
-                                                    var value = $(this).val();
-                                                    aa2.push(value);
-                                                })
-                                                $.ajax({
-                                                    url: '/member/save',
-                                                    type: 'get',
-                                                    data:{id:aa,authority:aa2},
-                                                    success: function(){
-                                                        alert('저장되었습니다');
-                                                        $('#member-management').dialog('close');
-                                                        location.reload();
-                                                    }
-                                                }) 
-                                            },'닫기':function(){
-                                                $('#member-management').dialog("close");
-                                            }
-                                        }
-                                    });
-                       
-                    }
+                    
 
                     function Etc(e){
                         location.href = '/site/Etc/'+e;
+                    }
+                    function enterKey(data){
+                        if(window.event.keyCode == 13){
+                            
+                           window.location = '/search?data='+data+'&page=1' ;
+                        }
                     }
 
             </script>
@@ -186,15 +169,15 @@
 
                 </ul>
                 <div class="zeta-login" > 
-                  <input type="text" class="search">
-                  <img src="/index/image/search.svg" alt="찾기"></img>
+                  <input type="button" class="img-button">
+                  <input type="text" class="search" onkeyup="enterKey(this.value)">
+                
                   <hr style="border:1px solid rgb(214, 212, 212);">
                 </div>
                
             </div>
            
-            <div id="member-management" title="회원관리" style="display: none"></div>
-
+            
 
     </body>
 </html>

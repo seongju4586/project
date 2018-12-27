@@ -20,7 +20,9 @@ var storage =   multer.diskStorage({
 
 
   var select = fs.readFileSync('select.html','utf-8');
+  var etc_select = fs.readFileSync('etc_select.html','utf-8');
   var region = fs.readFileSync('region.html','utf-8');
+  var search = fs.readFileSync('search.html','utf-8');
 
 const mongoose = require('mongoose');
 
@@ -59,8 +61,17 @@ const loginSchema = new Schema({
     write: {type:Boolean},
     delete: {type:Boolean}
 });
+const uploadsSchema = new Schema({
+    number: {type:String},
+    id: {type: String},
+    title: {type: String},
+    content: {type:String},
+    date: {type:String},
+    count: {type:Number}
+});
 var mongodb = mongoose.model('region',listSchema);
 var logindb = mongoose.model('login',loginSchema);
+var uploadsdb = mongoose.model('uploads',uploadsSchema);
 var pageValue ='';
 var select_number ='';
 
@@ -138,6 +149,22 @@ app.get('/region/infor/:id',function(req,res){
 
     
 })
+
+app.get('/search',function(req,res){
+    var sess = req.session;
+    var page = (parseInt(req.query.page)-1)*15;
+    mongodb.find({address:{$regex:req.query.data }},function(err,docs){
+        if ( docs.length % 15  == 0){
+            sess.page = parseInt( docs.length / 15 ) ;
+       }else{
+           sess.page = parseInt( docs.length / 15 ) + 1;
+       };
+    })
+    mongodb.find({address:{$regex:req.query.data}}).exec(function(err,docs){
+        res.send(ejs.render(search,{result:docs,page:sess.page}));
+    })
+
+})
 app.get('/menu',function(req,res){
     var total_page = 0;
     var button_page = 0;
@@ -194,9 +221,7 @@ app.get('/menu/1',function(req,res){
         res.send({data:data});
     });
 });
-app.get('/txtEditor',function(req,res){
-    res.sendFile(__dirname+'/txt_editor.html');
-});
+
 
 
 
@@ -240,6 +265,60 @@ app.get('/logout',function(req,res){
 })
 app.get('/signup',function(req,res){
     res.sendFile(__dirname+'/signup.html');
+    console.log(req.query.data);
+})
+app.get('/writing',function(req,res){
+    res.sendFile(__dirname+'/writing.html');
+})
+app.post('/etc/upload',function(req,res){
+    var sess = req.session;
+    var date = new Date();
+    var year = date.getFullYear(),
+    month = date.getMonth()+1,
+    day = date.getDate(),
+    hour = date.getHours(),
+    minute = date.getMinutes(),
+    second = date.getSeconds();
+    if(second < 10){
+    second = '0'+date.getSeconds();
+    }
+    if(minute < 10){
+    minute = '0'+date.getMinutes();
+    }
+    if(hour < 10){
+    hour = '0'+date.getHours();
+    }
+    if(day < 10){
+    day = '0'+date.getDate();
+    }
+    if(month < 10){
+    month = '0'+date.getMonth();
+    }
+    var today = year+''+month+''+day+''+hour+''+minute+''+second;
+    var date = year+'-'+month+'-'+day;
+    var uploads = new uploadsdb({
+        number:today,
+        id: sess.user,
+        title: req.body.title,
+        content: req.body.ir1,
+        date: date,
+        count: 0
+    })
+    uploads.save(function(err,docs){
+        res.redirect('/');
+    });
+})
+app.get('/etc/load',function(req,res){
+    uploadsdb.find({},function(err,docs){
+        res.send({result:docs});
+    })
+})
+app.get('/etc/select',function(req,res){
+    uploadsdb.findOne({number:req.query.id},function(err,docs){
+            docs.count = docs.count + 1 ;
+            docs.save();
+        res.send(ejs.render(etc_select,{data:docs}));
+    })
 })
 app.get('/signup2',function(req,res){
 

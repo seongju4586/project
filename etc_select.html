@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Gamja+Flower" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Stylish" rel="stylesheet">
+        <script src="/index/jquery_ui/jquery/jquery.js"></script>
+        <script src="/index/js/bootstrap.js"></script>
+
+        <script src="/index/jquery_ui/jquery-ui.js"></script>
+        <style>
+            #main-div{text-align: center;  }
+            #main-title{text-align: center;}
+            #main-category{
+                display: inline-block;
+                text-align: center;
+                width: 1400px;
+
+            }
+            #main-content{
+                display: inline-block;
+                width: 1400px;
+                height: auto;
+                overflow: hidden;
+                text-align: center;
+            }
+            #main-end{
+                display: inline-block;
+                width: 1400px;
+                color: rgb(175, 172, 172);
+            }
+            .select{
+                display: inline-block;
+                width: 1100px;
+                border: 1px solid black;
+                border-radius: 10px;
+                text-align: left;
+            }
+            .etc_content{
+                margin: 40px;
+                width: 1020px;
+                height: 500px;
+                border: 1px solid gray;
+                border-radius: 10px;
+            }
+        </style>
+        <script>
+            $(function(){
+                $('#main-category').load('/category');
+                $('#main-title').load('/a/main.html');
+                $('.etc_content').append($('#etc1').val());
+            })
+
+
+        </script>
+    </head>
+    <body>
+        <div id="main-div">
+            <div id="main-title"></div>
+            <div id="main-category"></div>
+            <div id="main-content">
+                 <div class="select">
+                     <div style="font-size:30pt; margin:10px;"><%= data.title %></div>
+                     <div  style=" margin:10px;">작성자: <%= data.id %></div> <div style="text-align:right; margin:10px;"><%= data.date %></div>
+                     <div class="etc_content"> </div>
+                 </div>
+            </div>
+            <div id="main-end">
+                    <hr>(주)맛고 대전시 서구 월평대로 2 사업자등록번호 123-34-5678 통신판매신고 123-4567-89호<br>
+                    대표이사 홍길동 대표전화 042-555-5555 Fax 050-1234-1234 naver@naver.com<p>copyright (주)맛고 Allright reserved</p>
+            </div>
+        </div>
+        <input type="hidden" id="etc1" value="<%= data.content %>">
+    </body>
+</html>
